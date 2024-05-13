@@ -34,8 +34,8 @@ class UserManager:
 	def validate_username(self, username, users):
 		for user in users:
 			if user[0] == username:
-				return self.validate_password(username, user[1])
-		return True
+				return False  # Username already exists
+		return True  # Username does not exist
 
 	def validate_password(self, username, password, users):
 		for user in users:
@@ -44,13 +44,14 @@ class UserManager:
 		return False
 	
 	def register(self):
+		print("Registration")
 		while True:
 			existing_users = self.load_users()
 			username = input("Enter username (at least 4 characters), or leave blank to cancel: ")
 			if not username:
 				return False
 
-			if len(username) <= 4:
+			if len(username) < 4:
 				print("Username must be at least 4 characters.")
 				continue
 
@@ -58,8 +59,9 @@ class UserManager:
 			if not password:
 				return False
 
-			if len(password) <= 8:
+			if len(password) < 8:
 				print("Password must be at least 8 characters.")
+				continue
 
 			if not self.validate_username(username, existing_users):
 				print("Username already exists. Please choose a different one.")
@@ -67,10 +69,24 @@ class UserManager:
 
 			existing_users.append((username, password))
 			self.save_users(existing_users)
-			print(f"Welcome, {username}!")
 			return True
 		
 	def login(self):
-		print("login")
+		print("Login")
+		while True:
+			existing_users = self.load_users()
+			username = input("Enter a username, or leave blank to cancel: ")
+			if not username:
+				return False
+			
+
+			password = input("Enter a password, or leave blank to cancel: ")
+			if not password:
+				return False
+			
+			if self.validate_password(username, password, existing_users):
+				return username
+			else:
+				print("Invalid username or password. Please try again.")
 
 	

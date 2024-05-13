@@ -1,27 +1,33 @@
 from utils.user_manager import UserManager
+from utils.dice_game import DiceGame
 import sys
 
 def main():
-    print("\nWelcome to Dice Roll Game")
-    print("1. Register")
-    print("2. Login")
-    print("3. Exit")
     while True:
+        print("\nWelcome to Dice Roll Game")
+        print("1. Register")
+        print("2. Login")
+        print("3. Exit")
         choice = input("Please enter your command: ")
         try:
             choice = int(choice)
             if choice == 1:
-                UserManager().register()
-                break
+                if UserManager().register():
+                    print("Registration successful.")
+                else:
+                    print("Registration cancelled.")
             elif choice == 2:
-                UserManager().login()
-                break
+                username = UserManager().login()
+                if username:
+                    DiceGame(UserManager).menu(username)
+                else:
+                    print("Login cancelled.")
             elif choice == 3:
                 sys.exit()
             else:
-                print("Invalid choice. Please try again.")
+                print("\nInvalid choice. Please try again.")
         except ValueError:
-            print("Invalid choice. Please try again.")
+            print("\nInvalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
