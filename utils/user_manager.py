@@ -1,4 +1,5 @@
 import os
+from utils.user import User
 
 class UserManager:
 	def __init__(self):
@@ -34,8 +35,8 @@ class UserManager:
 	def validate_username(self, username, users):
 		for user in users:
 			if user[0] == username:
-				return False  # Username already exists
-		return True  # Username does not exist
+				return False
+		return True
 
 	def validate_password(self, username, password, users):
 		for user in users:
@@ -88,5 +89,3 @@ class UserManager:
 				return username
 			else:
 				print("Invalid username or password. Please try again.")
-
-	

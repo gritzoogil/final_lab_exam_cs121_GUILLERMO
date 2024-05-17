@@ -39,6 +39,7 @@ class DiceGame:
 		game_over = False
 		tie_count = 0
 		game_scores = self.load_scores()
+		date_now = datetime.now().strftime(f"%Y:%d:%H:%M:%S:%f")
 
 		print(f"Starting game as {username}...")
 
@@ -106,7 +107,8 @@ class DiceGame:
 					game_over = True
 
 		if total_stages_won > 0:
-			game_scores.append((username, total_points, total_stages_won))
+			game_id = date_now
+			game_scores.append((username, total_points, total_stages_won, game_id))
 			self.save_scores(game_scores)
 
 
@@ -114,15 +116,15 @@ class DiceGame:
 		scores = self.load_scores()
 
 		if scores:
-			sorted_scores = sorted(scores, key=lambda x: int(x[1]), reverse=True)  # Sort by points
+			sorted_scores = sorted(scores, key=lambda x: int(x[1]), reverse=True)
 			print("Top Scores:")
-			for i, (username, points, wins) in enumerate(sorted_scores[:10], start=1):
-				print(f"{i}. {username}: Points - {points}, Wins - {wins}")
+			for i, (username, points, wins, game_id) in enumerate(sorted_scores[:10], start=1):
+				print(f"{i}. {username}: Points - {points}, Wins - {wins}, Game ID - {game_id}")
 		else:
 			print("No games yet. Play a game to see top scores.")
 
 	def logout(self):
-		print("logout")
+		return True
 
 	def menu(self, username):
 		while True:
@@ -142,9 +144,9 @@ class DiceGame:
 					elif choice == 2:
 						self.show_top_scores()
 					elif choice == 3:
-						self.logout()
+						if self.logout():
+							break
 					else:
 						print("\nInvalid choice. Please try again.")
 				except ValueError:
 					print("\nInvalid choice. Please try again.")
-		
